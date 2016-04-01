@@ -7,12 +7,14 @@
     <title>Extend FullCalendar Events with Bootstrap Modal</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.css" type="text/css" rel="stylesheet" />
+    <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet" />
+    <style>.ui-dialog-title {background-image:url(http://image005.flaticon.com/1/svg/109/109978.svg);background-repeat:no-repeat;padding-left:25px;}</style>
 </head>
 <body>
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <h1>FullCalendar Events with Bootstrap Modal</h1>
+                <h1>FullCalendar Events with jQuery UI Modal</h1>
                 <p>from <a href="http://www.mikesmithdev.com/blog/fullcalendar-event-details-with-bootstrap-modal/" target="_blank">http://www.mikesmithdev.com/blog/fullcalendar-event-details-with-bootstrap-modal/</a></p>
                 <br />
                 <div id="bootstrapModalFullCalendar"></div>
@@ -20,26 +22,16 @@
         </div>
     </div>
 
-    <div id="fullCalModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
-                    <h4 id="modalTitle" class="modal-title"></h4>
-                </div>
-                <div id="modalBody" class="modal-body"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a class="btn btn-primary" id="eventUrl" target="_blank">Event Page</a>
-                </div>
-            </div>
-        </div>
+    <div id="eventContent" title="Event Details">
+        <div id="eventInfo"></div>
+        <p><strong><a id="eventLink" target="_blank">Read More</a></strong></p>
     </div>
+
 
     <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.6.1/fullcalendar.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -49,11 +41,14 @@
                     center: 'prev title next',
                     right: ''
                 },
-                eventClick:  function(event, jsEvent, view) {
-                    $('#modalTitle').html(event.title);
-                    $('#modalBody').html(event.description);
-                    $('#eventUrl').attr('href',event.url);
-                    $('#fullCalModal').modal();
+                eventClick: function (event, jsEvent, view) {
+                    //set the values and open the modal
+                    $("#eventInfo").html(event.description);
+                    $("#eventLink").attr('href', event.url);
+                    $("#eventContent").dialog({
+                        modal: true,
+                        title: event.title
+                    });
                     return false;
                 },
                 events:
